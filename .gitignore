@@ -1,4 +1,5 @@
 data/*.csv
+!data/old_system_stations.csv
 secrets.toml
 gcs-key.json
 
