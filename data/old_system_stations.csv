@@ -1,4 +1,4 @@
-sistema,station_id,name,calle_principal,calle_secundaria,colonia,alcaldia,latitude,longitude,tipo_ce,candados
+sistema,short_name,name,calle_principal,calle_secundaria,colonia,alcaldia,lat,lon,tipo_ce,capacity
 ECOBICI,1,Río Sena - Río Balsas,Río Sena,Río Balsas,Cuauhtémoc,CUAUHTEMOC,19.4335895,-99.1678193,4G,27
 ECOBICI,2,Río Guadalquivir - Río Nazas,Río Guadalquivir,Río Nazas,Cuauhtémoc,CUAUHTEMOC,19.43051,-99.171201,3G,21
 ECOBICI,3,Reforma - Insurgentes,Reforma,Insurgentes,Tabacalera,CUAUHTEMOC,19.43163,-99.158547,4G,36

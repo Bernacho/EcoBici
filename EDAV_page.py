@@ -48,6 +48,7 @@ plt.rcParams.update({"text.color":text_color,
 # IMPORTANT: This path MUST start with 'gs://' and point to the root of your partitioned dataset.
 # For your setup, this should be 'gs://bernacho-ecobici-datahub/ecobici_partitioned_data/'
 BASE_GCS_DATA_URL = "gs://bernacho-ecobici-datahub/partitioned_historical_data/"
+GITHUB_REPO = "Bernacho/EcoBici"
 
 
 # Function to load and preprocess data
@@ -61,6 +62,9 @@ def load_data(base_path, filters, _fs): # Reverted to using filters
         # pandas.read_parquet can read partitioned datasets and apply filters
         # Pass the initialized filesystem object
         df = pd.read_parquet(base_path[5:], filters=filters, filesystem=_fs,engine="pyarrow")
+
+        df['Ciclo_Estacion_Retiro'] = df['Ciclo_Estacion_Retiro'].str.pad(width=3, side='left', fillchar='0')
+        df['Ciclo_Estacion_Arribo'] = df['Ciclo_Estacion_Arribo'].str.pad(width=3, side='left', fillchar='0')
         
         # Assuming column names are 'start_time', 'end_time', 'start_station_id', 'end_station_id'
         # Adjust these column names if yours are different
@@ -87,9 +91,12 @@ def load_data(base_path, filters, _fs): # Reverted to using filters
         day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         df['start_day_of_week'] = pd.Categorical(df['start_day_of_week'], categories=day_order, ordered=True)
         df['end_day_of_week'] = pd.Categorical(df['end_day_of_week'], categories=day_order, ordered=True)
-        
 
+        df['station_system'] = "Old"
+        df['station_system'] = df.station_system.mask((df.year>2022) or ((df.year==2022) & (df.month>=10)), "New")
+        
         return df
+    
     except Exception as e:
         st.error(f"Error loading data from GCS: {e}. Please ensure the GCS path `{base_path}` is the **root** of your partitioned dataset (i.e., contains `year=YYYY/` folders), and that the partitioning scheme (`year=YYYY/month=M/` or `year=YYYY/month=MM/`) matches. Also, verify your service account has `Storage Object Viewer` role.")
         return pd.DataFrame() # Return empty DataFrame on error
@@ -101,9 +108,14 @@ def load_stations_data():
     api_urls = {x['name']: x['url'] for x in response.json()['data']['en']['feeds']}
     response = requests.get(api_urls['station_information'],timeout=3.1)
     stations = pd.DataFrame.from_dict(response.json()['data']['stations'])
-    stations['station_id'] = stations['station_id'].str.lstrip("0")
-    # stations.set_index("short_name",inplace=True)
+    stations['station_id'] = stations['station_id'].str.pad(width=3, side='left', fillchar='0')
     stations.set_index("station_id",inplace=True)
+
+    old_stations = pd.read_csv("https://raw.githubusercontent.com/"+GITHUB_REPO+"/refs/heads/main/data/old_system_stations.csv",dtype={'station_id': str})
+    old_stations['station_id'] = old_stations['station_id'].str.pad(width=3, side='left', fillchar='0')
+    old_stations.set_index("station_id",inplace=True)
+
+    stations = pd.concat([stations,old_stations[~old_stations.index.isin(stations.index)]],axis=0,ignore_index=False)
     
     return stations
 
