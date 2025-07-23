@@ -1,0 +1,30 @@
+[server]
+enableStaticServing = true
+
+[[theme.fontFaces]]
+family = "inter"
+url = "app/static/Inter_18pt-Regular.ttf"
+style = "normal"
+weight = 400
+
+[[theme.fontFaces]]
+family = "inter"
+url = "app/static/Inter_18pt-Bold.ttf"
+style = "normal"
+weight = 700
+
+[[theme.fontFaces]]
+family = "inter"
+url = "app/static/Inter_18pt-Italic.ttf"
+style = "italic"
+weight = 400
+
+[theme]
+font = "inter"
+headingFont = "inter"
+codeFont = "inter"
+base = "dark"
+primaryColor = "#009844"
+backgroundColor = "#0E1117"
+secondaryBackgroundColor = "#483C47"
+textColor = "#FFFFFF"

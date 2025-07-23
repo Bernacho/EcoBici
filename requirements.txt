@@ -1,8 +1,7 @@
-python=3.12.*
-pandas=2.2.*
-statsmodels
+streamlit
+pandas
+matplotlib
 seaborn
-ipykernel
-ipython
-
-
+numpy
+gcsfs
+google-cloud-storage
