@@ -176,7 +176,9 @@ def main():
         index=None,
         placeholder="Month..."
     )
-    selected_month_num = month_options[selected_month_name]
+    selected_month_num = None
+    if selected_month_name is not None:
+        selected_month_num = month_options[selected_month_name]
 
     data = pd.DataFrame() 
     stations = load_stations_data()
@@ -197,7 +199,7 @@ def main():
         fs = gcsfs.GCSFileSystem()
 
 
-    if selected_year and (selected_month_num is not None):
+    if selected_year and selected_month_num:
         filters = [('year', '=', selected_year)]
         filters.append(('month', '=', selected_month_num))
         
