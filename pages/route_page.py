@@ -403,6 +403,29 @@ def main():
                                     [destination_station['name'],docks_available]])
                     st.pydeck_chart(deck)
 
+    
+    st.sidebar.markdown("""
+        <style>
+        .tooltip-label {
+            font-size: 0.75rem;
+        }
+        </style>
+
+        <span class="tooltip-label bottom-span" title="
+        • Python
+        • OSMnx
+        • NetworkX
+        • Geopandas
+        • NumPy
+        • Streamlit
+        • Matplotlib
+        • Seaborn
+        • Git & GitHub
+        ">
+        🛠️ <strong>Tools & Technologies Used</strong>
+        </span>
+        """, unsafe_allow_html=True)
+
 
     st.write("---")
     st.write("#### Data Source: [Mexico City Ecobici](https://www.ecobici.cdmx.gob.mx/)")

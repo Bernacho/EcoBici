@@ -151,6 +151,28 @@ def main():
         </style>
     """, unsafe_allow_html=True)
 
+    st.sidebar.markdown("""
+        <style>
+        .tooltip-label {
+            font-size: 0.75rem;
+        }
+        </style>
+
+        <span class="tooltip-label bottom-span" title="
+        • Python
+        • OSMnx
+        • NetworkX
+        • Geopandas
+        • NumPy
+        • Streamlit
+        • Matplotlib
+        • Seaborn
+        • Git & GitHub
+        ">
+        🛠️ <strong>Tools & Technologies Used</strong>
+        </span>
+        """, unsafe_allow_html=True)
+
     if "selected" not in st.session_state:
         st.session_state.selected = "rent" 
     

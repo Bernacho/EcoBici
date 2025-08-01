@@ -244,7 +244,6 @@ def main():
             return
 
         st.write("---")
-
   
         st.header("📊 Key Visualizations")
 
@@ -383,6 +382,33 @@ def main():
 
     else:
         st.warning("No data loaded.")
+
+    
+    st.sidebar.markdown("""
+        <style>
+        .tooltip-label {
+            font-size: 0.75rem;
+        }
+        </style>
+                        
+
+        <hr style='margin-top:5px; margin-bottom:5px;' />
+
+
+        <span class="tooltip-label bottom-span" title="
+        • Python
+        • OSMnx
+        • NetworkX
+        • Geopandas
+        • NumPy
+        • Streamlit
+        • Matplotlib
+        • Seaborn
+        • Git & GitHub
+        ">
+        🛠️ <strong>Tools & Technologies Used</strong>
+        </span>
+        """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
