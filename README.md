@@ -1,6 +1,6 @@
 # EcoBici steamlit app
 
-Streamlit app using Ecobici data, the public bicycle system in Mexico City.
+[Streamlit app](https://ecobici.streamlit.app) using Ecobici data, the public bicycle system in Mexico City.
 
 App features:
 1. Live stations data visualization 
@@ -21,3 +21,5 @@ Skills:
 * Geospatial data processing
 * Data wrangling and cleaning
 * Linear algebra
+
+<sub><sup>[Link to app](https://ecobici.streamlit.app)</sup></sub>
