@@ -9,3 +9,4 @@ osmnx
 networkx
 geopandas
 geopy
+scikit-learn
