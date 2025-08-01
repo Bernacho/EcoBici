@@ -153,7 +153,7 @@ def main():
 
     st.title("🚲 Ecobici - Mexico City Bike Sharing System") 
     st.header("Exploratory Data Analysis")
-    st.write("Select a year and optionally a month to load bike sharing trip data.")
+    st.write("Select a year and a month to load bike sharing trip data.")
 
     st.sidebar.header("Data Selection")
     tz = pytz.timezone("America/Mexico_City")
@@ -166,15 +166,15 @@ def main():
     )
 
     month_options = {
-        "Month...": None,
         "January": 1, "February": 2, "March": 3, "April": 4,
         "May": 5, "June": 6, "July": 7, "August": 8,
         "September": 9, "October": 10, "November": 11, "December": 12
     }
     selected_month_name = st.sidebar.selectbox(
-        "Select a Month (Optional)",
+        "Select a Month",
         options=list(month_options.keys()),
-        index=0 
+        index=None,
+        placeholder="Month..."
     )
     selected_month_num = month_options[selected_month_name]
 
@@ -197,18 +197,13 @@ def main():
         fs = gcsfs.GCSFileSystem()
 
 
-    if selected_year:
+    if selected_year and (selected_month_num is not None):
         filters = [('year', '=', selected_year)]
-        if selected_month_num is not None:
-            filters.append(('month', '=', selected_month_num))
+        filters.append(('month', '=', selected_month_num))
         
-
         data = load_data(BASE_GCS_DATA_URL, filters, fs) 
-
-        if selected_month_num is None:
-            st.sidebar.warning(f"Month not selected. Loading all data for year {selected_year}.")
     else:
-        st.info("Please select a year to load data.")
+        st.info("Please select a year and a month to load data.")
 
 
     if not data.empty:
