@@ -5,3 +5,5 @@ seaborn
 numpy
 gcsfs
 google-cloud-storage
+osmnx
+networkx
