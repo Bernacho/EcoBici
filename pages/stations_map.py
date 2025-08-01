@@ -5,6 +5,8 @@ import requests
 import json
 import numpy as np
 from matplotlib import colors
+from datetime import datetime
+import pytz
 
 ecobici_colors = ['#009844','#B1B1B1','#235B4E','#483C47','#7D5C65','#FFFFFF','#FDE74C','#D81E5B']
 
@@ -175,10 +177,13 @@ def main():
 
     if "selected" not in st.session_state:
         st.session_state.selected = "rent" 
+
+    tz = pytz.timezone("America/Mexico_City")
+    now = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
     
     st.title("🚲 Ecobici - Mexico City Bike Sharing System") 
     st.header("Station status")
-    st.write("Query live data to search for available stations!")
+    st.write(f"Query live data to search for available stations! ``Data updated on {now}``")
 
     def select_a():
         st.session_state.selected = "rent"
