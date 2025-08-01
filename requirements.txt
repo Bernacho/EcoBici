@@ -7,3 +7,4 @@ gcsfs
 google-cloud-storage
 osmnx
 networkx
+geopandas
