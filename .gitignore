@@ -1,5 +1,5 @@
 data/*.csv
-data/partitioned_historical_data/
+Ecobici_Dataset/
 !data/old_system_stations.csv
 !data/new_stations_with_nodes.csv
 secrets.toml
