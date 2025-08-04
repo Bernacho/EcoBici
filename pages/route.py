@@ -28,7 +28,8 @@ def haversine(lat1, lon1, lat2, lon2):
 
 @st.cache_resource
 def load_graph():
-    G = ox.load_graphml("graphs/mexico_city.graphml")
+    path = "graphs/mexico_city.graphml"
+    G = ox.load_graphml(path)
     bounds = ox.convert.graph_to_gdfs(G, nodes=True, edges=False).total_bounds
     
     G_walk = nx.MultiGraph(G)
