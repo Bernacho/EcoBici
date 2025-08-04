@@ -1,6 +1,5 @@
 [server]
 enableStaticServing = true
-maxUploadSize = 200
 
 [[theme.fontFaces]]
 family = "inter"
