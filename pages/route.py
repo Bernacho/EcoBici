@@ -9,6 +9,7 @@ import osmnx as ox
 from geopandas.tools import geocode
 from math import radians, sin, cos, sqrt, atan2,asin,log2
 import networkx as nx
+import os
 
 
 
@@ -26,10 +27,23 @@ def haversine(lat1, lon1, lat2, lon2):
     distance = R * c
     return distance
 
+
+GRAPH_PATH = "cached_graph.graphml"
+
 @st.cache_resource
-def load_graph():
-    path = "graphs/mexico_city.graphml"
-    G = ox.load_graphml(path)
+def load_graph(stations_df):
+    
+    if os.path.exists(GRAPH_PATH):
+            return ox.load_graphml(GRAPH_PATH)
+    else:
+        buffer = 0.07
+        north = stations_df.lat.max() + buffer
+        south = stations_df.lat.min() - buffer
+        east = stations_df.lon.max()+buffer
+        west = stations_df.lon.min()-buffer
+
+        G = ox.graph_from_bbox((west, south, east, north), network_type="bike")
+        G = ox.distance.add_edge_lengths(G)
     bounds = ox.convert.graph_to_gdfs(G, nodes=True, edges=False).total_bounds
     
     G_walk = nx.MultiGraph(G)
@@ -260,7 +274,10 @@ def main():
     
     st.title("🚲 Ecobici - Mexico City Bike Sharing System") 
     st.header("Route finder") 
-    G, G_bounds, G_walk = load_graph()
+    stations = load_stations_data()
+    with st.spinner("Loading graph... This may take up to a minute."):
+        G, G_bounds, G_walk = load_graph(stations)
+
     
     st.write("Enter addresses for the *origin* and *destination* of your tip.")
     st.write("We will let you know which are the closest stations and the best route to follow.")
@@ -318,7 +335,6 @@ def main():
                 origin_node = ox.nearest_nodes(G,origin_coordinate[0],origin_coordinate[1])
                 destination_node = ox.nearest_nodes(G,destination_coordinate[0], destination_coordinate[1])
 
-                stations = load_stations_data()
                 station_status = get_stations_status()
                 stations = stations.join(station_status[['num_bikes_available','num_docks_available']])
 

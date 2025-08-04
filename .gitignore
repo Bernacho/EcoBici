@@ -6,6 +6,7 @@ secrets.toml
 gcs-key.json
 cache/
 Historical_data_EDAV.ipynb
+*.graphml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
