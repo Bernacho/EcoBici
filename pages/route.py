@@ -11,6 +11,12 @@ from math import radians, sin, cos, sqrt, atan2,asin,log2
 import networkx as nx
 import os
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
 
 
 ecobici_colors = ['#009844','#B1B1B1','#235B4E','#483C47','#7D5C65','#FFFFFF','#FDE74C','#D81E5B']
@@ -44,8 +50,11 @@ GRAPH_PATH = "cached_graph.graphml"
 def load_graph():
     
     if os.path.exists(GRAPH_PATH):
-            return ox.load_graphml(GRAPH_PATH)
+            logger.info("Starting graph loading...")
+            G = ox.load_graphml(GRAPH_PATH)
+            logger.info("... Done")
     else:
+        logger.info("Starting graph download...")
         stations_df = load_stations_data()
         buffer = 0.07
         north = stations_df.lat.max() + buffer
@@ -56,6 +65,7 @@ def load_graph():
         G = ox.graph_from_bbox((west, south, east, north), network_type="bike")
         G = ox.distance.add_edge_lengths(G)
         ox.save_graphml(G, GRAPH_PATH)
+        logger.info("... Done")
 
     bounds = ox.convert.graph_to_gdfs(G, nodes=True, edges=False).total_bounds
     
@@ -336,7 +346,7 @@ def main():
             if (origin_coordinate is not None) and (destination_coordinate is not None):
                 origin_node = ox.nearest_nodes(G,origin_coordinate[0],origin_coordinate[1])
                 destination_node = ox.nearest_nodes(G,destination_coordinate[0], destination_coordinate[1])
-                
+
                 stations = load_stations_data()
                 station_status = get_stations_status()
                 stations = stations.join(station_status[['num_bikes_available','num_docks_available']])
