@@ -276,9 +276,9 @@ def main():
     
     st.title("🚲 Ecobici - Mexico City Bike Sharing System") 
     st.header("Route finder") 
-    stations = load_stations_data()
+    
     with st.spinner("Loading graph... This may take up to a minute."):
-        G, G_bounds, G_walk = load_graph(stations)
+        G, G_bounds, G_walk = load_graph()
 
     
     st.write("Enter addresses for the *origin* and *destination* of your tip.")
@@ -336,7 +336,8 @@ def main():
             if (origin_coordinate is not None) and (destination_coordinate is not None):
                 origin_node = ox.nearest_nodes(G,origin_coordinate[0],origin_coordinate[1])
                 destination_node = ox.nearest_nodes(G,destination_coordinate[0], destination_coordinate[1])
-
+                
+                stations = load_stations_data()
                 station_status = get_stations_status()
                 stations = stations.join(station_status[['num_bikes_available','num_docks_available']])
 
