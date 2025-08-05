@@ -27,15 +27,26 @@ def haversine(lat1, lon1, lat2, lon2):
     distance = R * c
     return distance
 
+@st.cache_data
+def load_stations_data():
+    api_urls = get_api_urls()
+    response = requests.get(api_urls['station_information'],timeout=3.1)
+    stations = pd.DataFrame.from_dict(response.json()['data']['stations'])
+    stations['short_name'] = stations['short_name'].str.pad(width=3, side='left', fillchar='0')
+    stations.set_index("station_id",inplace=True)
+    
+    return stations
+
 
 GRAPH_PATH = "cached_graph.graphml"
 
 @st.cache_resource
-def load_graph(stations_df):
+def load_graph():
     
     if os.path.exists(GRAPH_PATH):
             return ox.load_graphml(GRAPH_PATH)
     else:
+        stations_df = load_stations_data()
         buffer = 0.07
         north = stations_df.lat.max() + buffer
         south = stations_df.lat.min() - buffer
@@ -45,7 +56,7 @@ def load_graph(stations_df):
         G = ox.graph_from_bbox((west, south, east, north), network_type="bike")
         G = ox.distance.add_edge_lengths(G)
         ox.save_graphml(G, GRAPH_PATH)
-        
+
     bounds = ox.convert.graph_to_gdfs(G, nodes=True, edges=False).total_bounds
     
     G_walk = nx.MultiGraph(G)
@@ -66,17 +77,6 @@ def get_api_urls():
     api_urls = {x['name']: x['url'] for x in response.json()['data']['en']['feeds']}
 
     return api_urls
-
-
-@st.cache_data
-def load_stations_data():
-    api_urls = get_api_urls()
-    response = requests.get(api_urls['station_information'],timeout=3.1)
-    stations = pd.DataFrame.from_dict(response.json()['data']['stations'])
-    stations['short_name'] = stations['short_name'].str.pad(width=3, side='left', fillchar='0')
-    stations.set_index("station_id",inplace=True)
-    
-    return stations
 
 def get_stations_status():
     api_urls = get_api_urls()
