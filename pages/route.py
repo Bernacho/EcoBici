@@ -44,6 +44,8 @@ def load_graph(stations_df):
 
         G = ox.graph_from_bbox((west, south, east, north), network_type="bike")
         G = ox.distance.add_edge_lengths(G)
+        ox.save_graphml(G, GRAPH_PATH)
+        
     bounds = ox.convert.graph_to_gdfs(G, nodes=True, edges=False).total_bounds
     
     G_walk = nx.MultiGraph(G)
