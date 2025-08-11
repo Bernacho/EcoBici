@@ -160,7 +160,7 @@ def main():
     now = datetime.now(tz)
     selected_year = st.sidebar.selectbox(
         "Select Year",
-        options=list(range(2019, now.year)),
+        options=list(range(2019, now.year+1)),
         index=None, 
         placeholder="Year..."
     )
