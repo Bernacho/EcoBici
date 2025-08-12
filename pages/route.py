@@ -12,6 +12,9 @@ import networkx as nx
 import os
 import logging
 
+from io import BytesIO
+
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -55,17 +58,25 @@ def load_graph():
             G = ox.load_graphml(GRAPH_PATH)
             logger.info("... Done")
     else:
-        logger.info("Starting graph download...")
-        stations_df = load_stations_data()
-        buffer = 0.07
-        north = stations_df.lat.max() + buffer
-        south = stations_df.lat.min() - buffer
-        east = stations_df.lon.max()+buffer
-        west = stations_df.lon.min()-buffer
+        # logger.info("Starting graph download...")
+        # stations_df = load_stations_data()
+        # buffer = 0.07
+        # north = stations_df.lat.max() + buffer
+        # south = stations_df.lat.min() - buffer
+        # east = stations_df.lon.max()+buffer
+        # west = stations_df.lon.min()-buffer
 
-        logger.info(f"OX timeout set to {ox.settings.timeout} seconds")
-        G = ox.graph_from_bbox((west, south, east, north), network_type="bike")
-        G = ox.distance.add_edge_lengths(G)
+        # logger.info(f"OX timeout set to {ox.settings.timeout} seconds")
+        # G = ox.graph_from_bbox((west, south, east, north), network_type="bike")
+        # G = ox.distance.add_edge_lengths(G)
+
+        graph_raw_url = "https://github.com/Bernacho/EcoBici_Dataset/raw/refs/heads/main/graphs/mexico_city.graphml"
+        logger.info("Starting graph download from Github...")
+        response = requests.get(graph_raw_url)
+        response.raise_for_status()
+        G=  ox.load_graphml(BytesIO(response.content))
+        logger.info("... Done.. Saving ...")
+
         ox.save_graphml(G, GRAPH_PATH)
         logger.info("... Done")
 
