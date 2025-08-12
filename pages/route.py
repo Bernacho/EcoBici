@@ -12,7 +12,8 @@ import networkx as nx
 import os
 import logging
 
-from io import BytesIO
+import tempfile
+
 
 
 logging.basicConfig(level=logging.INFO)
@@ -74,7 +75,12 @@ def load_graph():
         logger.info("Starting graph download from Github...")
         response = requests.get(graph_raw_url)
         response.raise_for_status()
-        G=  ox.load_graphml(BytesIO(response.content))
+        
+        with tempfile.NamedTemporaryFile(suffix=".graphml", delete=False) as tmp_file:
+                tmp_file.write(response.content)
+                tmp_path = tmp_file.name
+
+        G=  ox.load_graphml(tmp_path)
         logger.info("... Done.. Saving ...")
 
         ox.save_graphml(G, GRAPH_PATH)
