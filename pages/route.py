@@ -10,13 +10,14 @@ from geopandas.tools import geocode
 from math import radians, sin, cos, sqrt, atan2,asin,log2
 import networkx as nx
 import os
-
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+ox.settings.timeout = 600  # seconds
+ox.settings.overpass_settings = '[out:json][timeout:600]'
 
 
 ecobici_colors = ['#009844','#B1B1B1','#235B4E','#483C47','#7D5C65','#FFFFFF','#FDE74C','#D81E5B']
