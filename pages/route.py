@@ -63,6 +63,7 @@ def load_graph():
         east = stations_df.lon.max()+buffer
         west = stations_df.lon.min()-buffer
 
+        logger.info(f"OX timeout set to {ox.settings.timeout} seconds")
         G = ox.graph_from_bbox((west, south, east, north), network_type="bike")
         G = ox.distance.add_edge_lengths(G)
         ox.save_graphml(G, GRAPH_PATH)
