@@ -1,5 +1,9 @@
 import streamlit as st
 
+import os
+os.environ["STREAMLIT_WATCHDOG_MODE"] = "poll"
+
+
 st.set_page_config(page_title="EcoBici EDAV", page_icon=":bike:",initial_sidebar_state="expanded")
 
 pages_data = [
